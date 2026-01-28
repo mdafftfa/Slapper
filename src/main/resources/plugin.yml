@@ -1,0 +1,7 @@
+---
+name: Slapper
+version: 1.0.0
+main: org.mdafftfa.Slapper
+author: mdafftfa
+api: 2.0.0
+...
