@@ -425,7 +425,7 @@ public class SlapperCommand extends Command {
                     Server.getInstance().getPluginManager().callEvent(event);
 
                     if (entity instanceof SlapperEntity && !(event.isCancelled())) {
-                        ((SlapperEntity) entity).setNameTag(sender.getName());
+                        ((SlapperEntity) entity).setNameTag(name);
                         ((SlapperEntity) entity).spawnToAll();
 
                         sender.sendMessage(prefix + selectedEntity + " entity spawned with name " + name + " and entity ID " + ((Entity) entity).getId());
