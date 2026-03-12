@@ -1,5 +1,7 @@
 # Slapper for PowerNukkitX
 
+![](assets/preview.png)
+
 **Slapper** is a high-performance NPC (Non-Player Character) plugin specifically optimized for [PowerNukkitX](https://github.com/PowerNukkitX/PowerNukkitX). It allows server administrators to create stationary, persistent entities that execute one or multiple commands when interacted with or attacked by players.
 
 ---
@@ -26,7 +28,7 @@
 
 ---
 
-## 🎮 Commands & Permissions
+## Commands & Permissions
 
 ### Slapper Commands
 | Command | Description | Permission | Default |
