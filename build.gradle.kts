@@ -13,15 +13,18 @@ java {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
-    maven("https://repo.powernukkitx.org/releases")
+    maven("https://repo.maven.apache.org/maven2/")
     maven("https://jitpack.io")
-    maven("https://repo.opencollab.dev/maven-releases")
-    maven("https://repo.opencollab.dev/maven-snapshots")
+    maven("https://repo.opencollab.dev/maven-releases/")
+    maven("https://repo.opencollab.dev/maven-snapshots/")
 }
 
 dependencies {
-    compileOnly("org.powernukkitx:server:2.0.0-SNAPSHOT")
+    implementation("org.powernukkitx:server:2.0.0-SNAPSHOT")
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
 }
 
 publishing {
