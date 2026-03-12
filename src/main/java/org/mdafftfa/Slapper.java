@@ -7,108 +7,185 @@ import cn.nukkit.level.Location;
 import cn.nukkit.level.format.IChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.plugin.PluginBase;
+import cn.nukkit.registry.Registries;
 import cn.nukkit.scheduler.Task;
 
+import cn.nukkit.utils.TextFormat;
+import org.mdafftfa.commands.RcaCommand;
+import org.mdafftfa.commands.SlapperCommand;
 import org.mdafftfa.entity.*;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Slapper extends PluginBase {
 
-    public Map<String, Class<? extends SlapperInterface>> ENTITY_TYPES = new HashMap<>();
+    public Map<String, Constructor<? extends SlapperInterface>> ENTITY_TYPES = new HashMap<>();
+    public String prefix = TextFormat.YELLOW + "[Slapper] " + TextFormat.GREEN;
+
+    public Map<String, Integer> hitSessions = new HashMap<>();
 
     public void registerEntities() {
-        ENTITY_TYPES.put("Chicken", SlapperChicken.class);
-        ENTITY_TYPES.put("Pig", SlapperPig.class);
-        ENTITY_TYPES.put("Sheep", SlapperSheep.class);
-        ENTITY_TYPES.put("Cow", SlapperCow.class);
-        ENTITY_TYPES.put("MushroomCow", SlapperMushroomCow.class);
-        ENTITY_TYPES.put("Wolf", SlapperWolf.class);
-        ENTITY_TYPES.put("Enderman", SlapperEnderman.class);
-        ENTITY_TYPES.put("Spider", SlapperSpider.class);
-        ENTITY_TYPES.put("Skeleton", SlapperSkeleton.class);
-        ENTITY_TYPES.put("PigZombie", SlapperPigZombie.class);
-        ENTITY_TYPES.put("Creeper", SlapperCreeper.class);
-        ENTITY_TYPES.put("Slime", SlapperSlime.class);
-        ENTITY_TYPES.put("Silverfish", SlapperSilverfish.class);
-        ENTITY_TYPES.put("Villager", SlapperVillager.class);
-        ENTITY_TYPES.put("Zombie", SlapperZombie.class);
-        ENTITY_TYPES.put("Human", SlapperHuman.class);
-        ENTITY_TYPES.put("Bat", SlapperBat.class);
-        ENTITY_TYPES.put("CaveSpider", SlapperCaveSpider.class);
-        ENTITY_TYPES.put("LavaSlime", SlapperLavaSlime.class);
-        ENTITY_TYPES.put("Ghast", SlapperGhast.class);
-        ENTITY_TYPES.put("Ocelot", SlapperOcelot.class);
-        ENTITY_TYPES.put("Blaze", SlapperBlaze.class);
-        ENTITY_TYPES.put("ZombieVillager", SlapperZombieVillager.class);
-        ENTITY_TYPES.put("Snowman", SlapperSnowman.class);
-        ENTITY_TYPES.put("Minecart", SlapperMinecart.class);
-        ENTITY_TYPES.put("Boat", SlapperBoat.class);
-        ENTITY_TYPES.put("PrimedTNT", SlapperPrimedTNT.class);
-        ENTITY_TYPES.put("Horse", SlapperHorse.class);
-        ENTITY_TYPES.put("Donkey", SlapperDonkey.class);
-        ENTITY_TYPES.put("Mule", SlapperMule.class);
-        ENTITY_TYPES.put("SkeletonHorse", SlapperSkeletonHorse.class);
-        ENTITY_TYPES.put("ZombieHorse", SlapperZombieHorse.class);
-        ENTITY_TYPES.put("Witch", SlapperWitch.class);
-        ENTITY_TYPES.put("Rabbit", SlapperRabbit.class);
-        ENTITY_TYPES.put("Stray", SlapperStray.class);
-        ENTITY_TYPES.put("Husk", SlapperHusk.class);
-        ENTITY_TYPES.put("WitherSkeleton", SlapperWitherSkeleton.class);
-        ENTITY_TYPES.put("IronGolem", SlapperIronGolem.class);
-        ENTITY_TYPES.put("Squid", SlapperSquid.class);
-        ENTITY_TYPES.put("ElderGuardian", SlapperElderGuardian.class);
-        ENTITY_TYPES.put("Endermite", SlapperEndermite.class);
-        ENTITY_TYPES.put("Evoker", SlapperEvoker.class);
-        ENTITY_TYPES.put("Guardian", SlapperGuardian.class);
-        ENTITY_TYPES.put("PolarBear", SlapperPolarBear.class);
-        ENTITY_TYPES.put("Shulker", SlapperShulker.class);
-        ENTITY_TYPES.put("Vex", SlapperVex.class);
-        ENTITY_TYPES.put("Vindicator", SlapperVindicator.class);
-        ENTITY_TYPES.put("Wither", SlapperWither.class);
-        ENTITY_TYPES.put("Llama", SlapperLlama.class);
-        ENTITY_TYPES.put("EndCrystal", SlapperEndCrystal.class);
+        register("Chicken", SlapperChicken.class);
+        register("Pig", SlapperPig.class);
+        register("Sheep", SlapperSheep.class);
+        register("Cow", SlapperCow.class);
+        register("MushroomCow", SlapperMushroomCow.class);
+        register("Wolf", SlapperWolf.class);
+        register("Enderman", SlapperEnderman.class);
+        register("Spider", SlapperSpider.class);
+        register("Skeleton", SlapperSkeleton.class);
+        register("PigZombie", SlapperPigZombie.class);
+        register("Creeper", SlapperCreeper.class);
+        register("Slime", SlapperSlime.class);
+        register("Silverfish", SlapperSilverfish.class);
+        register("Villager", SlapperVillager.class);
+        register("Zombie", SlapperZombie.class);
+        register("Human", SlapperHumanEntity.class);
+        register("Bat", SlapperBat.class);
+        register("CaveSpider", SlapperCaveSpider.class);
+        register("LavaSlime", SlapperLavaSlime.class);
+        register("Ghast", SlapperGhast.class);
+        register("Ocelot", SlapperOcelot.class);
+        register("Blaze", SlapperBlaze.class);
+        register("ZombieVillager", SlapperZombieVillager.class);
+        register("Snowman", SlapperSnowman.class);
+        register("Minecart", SlapperMinecart.class);
+        register("Boat", SlapperBoat.class);
+        register("PrimedTNT", SlapperPrimedTNT.class);
+        register("Horse", SlapperHorse.class);
+        register("Donkey", SlapperDonkey.class);
+        register("Mule", SlapperMule.class);
+        register("SkeletonHorse", SlapperSkeletonHorse.class);
+        register("ZombieHorse", SlapperZombieHorse.class);
+        register("Witch", SlapperWitch.class);
+        register("Rabbit", SlapperRabbit.class);
+        register("Stray", SlapperStray.class);
+        register("Husk", SlapperHusk.class);
+        register("WitherSkeleton", SlapperWitherSkeleton.class);
+        register("IronGolem", SlapperIronGolem.class);
+        register("Squid", SlapperSquid.class);
+        register("ElderGuardian", SlapperElderGuardian.class);
+        register("Endermite", SlapperEndermite.class);
+        register("Evoker", SlapperEvoker.class);
+        register("Guardian", SlapperGuardian.class);
+        register("PolarBear", SlapperPolarBear.class);
+        register("Shulker", SlapperShulker.class);
+        register("Vex", SlapperVex.class);
+        register("Vindicator", SlapperVindicator.class);
+        register("Wither", SlapperWither.class);
+        register("Llama", SlapperLlama.class);
+        register("EndCrystal", SlapperEndCrystal.class);
+    }
+
+    private void register(String name, Class<? extends SlapperInterface> clazz) {
+        try {
+            Constructor<? extends SlapperInterface> constructor =
+                    clazz.getDeclaredConstructor(IChunk.class, CompoundTag.class);
+
+            constructor.setAccessible(true);
+            ENTITY_TYPES.put(name, constructor);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Slapper instance;
+
+    public static Slapper getInstance() {
+        return instance;
     }
 
     @Override
     public void onEnable() {
         this.registerEntities();
+        instance = this;
+
+        try {
+            Registries.ENTITY.registerCustomEntity(this, SlapperHumanEntity.class);
+            Registries.ENTITY.rebuildTag();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Server.getInstance().getScheduler().scheduleRepeatingTask(new Task() {
             @Override
             public void onRun(int currentTick) {
-                for (Level world : Server.getInstance().getLevels().values()) {
+                for (Level level : Server.getInstance().getLevels().values()) {
+                    if (level.getPlayers().isEmpty()) continue;
+                    if (!Server.getInstance().isLevelLoaded(level.getName())) continue;
 
-                    if (world.getPlayers().isEmpty()) continue;
+                    for (Entity entity : level.getEntities()) {
 
-                    for (Entity entity : world.getEntities()) {
+                        if (entity.namedTag.getBoolean(SlapperLoaderEntity.TAG) && !(entity instanceof SlapperLoaderEntity)) {
+                            SlapperLoaderEntity newEntity = new SlapperLoaderEntity(entity.getChunk(), entity.namedTag.copy());
+                            newEntity.writeSlapperDataFromEntity(entity);
+                            entity.close();
+                            newEntity.spawnToAll();
+                        }
+
+                        if (entity.namedTag.getBoolean(SlapperLoaderEntity.TAG) && entity instanceof SlapperLoaderEntity) {
+                            if (((SlapperLoaderEntity) entity).isSlapperHumanEntity()) {
+                                SlapperHumanEntity slapper = new SlapperHumanEntity(entity.chunk, Entity.getDefaultNBT(entity.getLocation()));
+                                slapper.setDataFromEntity(entity);
+                                slapper.spawnToAll();
+                                entity.close();
+                            }
+
+                            if (((SlapperLoaderEntity) entity).isSlapperEntity()) {
+                                try {
+                                    Location location = entity.getLocation();
+                                    IChunk chunk = entity.getChunk();
+                                    CompoundTag nbt = Entity.getDefaultNBT(location);
+
+                                    Constructor<? extends SlapperInterface> constructor =
+                                            ENTITY_TYPES.get(entity.namedTag.getString("SlapperType"));
+
+                                    if (constructor == null) {
+                                        continue;
+                                    }
+                                    SlapperInterface slapper = constructor.newInstance(chunk, nbt);
+                                    slapper.setDataFromEntity(entity);
+                                    ((SlapperEntity) slapper).spawnToAll();
+                                    entity.close();
+                                } catch (Exception e) {
+                                    Server.getInstance().getLogger().info(e.toString());
+                                }
+                            }
+                        }
+
                         if (
-                                entity.namedTag.getBoolean(SlapperEntity.TAG) && !(entity instanceof SlapperEntity) ||
-                                entity.namedTag.getBoolean(SlapperHuman.TAG) && !(entity instanceof SlapperHuman)
+                                (entity.namedTag.getBoolean(SlapperEntity.TAG) && !(entity instanceof SlapperEntity)) ||
+                                        (entity.namedTag.getBoolean(SlapperHumanEntity.TAG) && !(entity instanceof SlapperHumanEntity))
                         ) {
 
                             try {
                                 Location location = entity.getLocation();
+                                IChunk chunk = entity.getChunk();
                                 CompoundTag nbt = Entity.getDefaultNBT(location);
-                                IChunk chunk = entity.getLocation().getChunk();
 
-                                Class<? extends SlapperInterface> entityClass = ENTITY_TYPES.get(entity.namedTag.getString("EntityType"));
-                                SlapperInterface newEntity = entityClass
-                                        .getDeclaredConstructor(IChunk.class, CompoundTag.class)
-                                        .newInstance(chunk, nbt);
+                                Constructor<? extends SlapperInterface> constructor =
+                                        ENTITY_TYPES.get(entity.namedTag.getString("SlapperType"));
 
-                                entity.close();
+                                if (constructor == null) {
+                                    continue;
+                                }
+
+                                SlapperInterface newEntity = constructor.newInstance(chunk, nbt);
 
                                 if (newEntity instanceof SlapperEntity) {
                                     ((SlapperEntity) newEntity).setDataFromEntity(entity);
                                     ((SlapperEntity) newEntity).spawnToAll();
                                 }
 
-                                if (newEntity instanceof SlapperHuman) {
-                                    ((SlapperHuman) newEntity).setDataFromEntity(entity);
-                                    ((SlapperHuman) newEntity).spawnToAll();
+                                if (newEntity instanceof SlapperHumanEntity) {
+                                    ((SlapperHumanEntity) newEntity).setDataFromEntity(entity);
+                                    ((SlapperHumanEntity) newEntity).spawnToAll();
                                 }
+
+                                entity.close();
 
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -120,7 +197,9 @@ public class Slapper extends PluginBase {
             }
         }, 20);
 
+        Server.getInstance().getPluginManager().registerEvents(new SlapperListener(this), this);
         Server.getInstance().getCommandMap().register("slapper", new SlapperCommand(this));
+        Server.getInstance().getCommandMap().register("rca", new RcaCommand(this));
         super.onEnable();
     }
 
