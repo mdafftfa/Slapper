@@ -10,6 +10,9 @@ permissions:
     default: op
     description: Allow using command /rca
 
+  slapper.command.cancel:
+    default: op
+    description: Allow using command /slapper cancel
   slapper.command.spawn:
     default: op
     description: Allow using command /slapper spawn

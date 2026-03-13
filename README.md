@@ -31,13 +31,15 @@
 ## Commands & Permissions
 
 ### Slapper Commands
-| Command | Description | Permission | Default |
-| :--- | :--- | :--- | :--- |
-| `/slapper spawn <type> [name]` | Spawns a new NPC at your location. | `slapper.command.spawn` | OP |
-| `/slapper edit <id> <addcom\|delcom>`| Adds or removes a command from an NPC. | `slapper.command.edit` | OP |
-| `/slapper id` | Find an NPC's ID by hitting/slapping it. | `slapper.command.id` | OP |
-| `/slapper remove` | Enter removal mode to delete an NPC. | `slapper.command.remove` | OP |
-| `/slapper list` | Displays a list of all active Slapper entities. | `slapper.command.list` | OP |
+| Command                               | Description                                                                    | Permission               | Default |
+|:--------------------------------------|:-------------------------------------------------------------------------------|:-------------------------| :--- |
+| `/slapper id`                         | Find an NPC's ID by hitting/slapping it.                                       | `slapper.command.id`     | OP |
+| `/slapper cancel`                     | Cancel the hit session of (/slapper id) & (/slapper remove                     | `slapper.command.cancel` | OP |
+| `/slapper edit <id> <action> [value]` | Modifies an existing NPC's properties, equipment, commands, scale, or location | `slapper.command.edit`   | OP |
+| `/slapper help`                       | Show all available Slapper commands.                                           | `slapper.command.help`   | OP |
+| `/slapper list`                       | Show a list of all available slapper entities.                                 | `slapper.command.list`   | OP |
+| `/slapper remove <null:id>`           | Enter removal mode to delete an NPC.                                           | `slapper.command.remove` | OP |
+| `/slapper spawn <type> [name]`        | Spawns a new NPC at your location.                                             | `slapper.command.spawn`  | OP |
 
 ### Utility Commands
 | Command | Description | Permission | Default |
@@ -53,10 +55,8 @@ To create a Human NPC that opens a menu or teleports a player:
 1.  **Spawn:** `/slapper spawn human §6§lNavigator`
 2.  **Identify:** Run `/slapper id` and hit the NPC. (Let's say the ID is `500`).
 3.  **Add Command:** `/slapper edit 500 addcommand rca {player} warp lobby`
-
-### 2. Managing NPCs
-* To see all available slapper entities: `/slapper list`
-* To delete an NPC: Run `/slapper remove` then hit the target NPC. You will see: `[Slapper] Entity removed!`.
+4.  **Execute Command:** Ensure the `/warp lobby` command is for teleport to lobby then interact slapper to execute the command.
+5.  **To delete an NPC:** Run `/slapper remove` then hit the target NPC. You will see: `[Slapper] Entity removed!`.
 
 ---
 

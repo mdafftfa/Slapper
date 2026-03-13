@@ -87,6 +87,11 @@ public class SlapperCommand extends Command {
             }
 
             case "cancel": {
+                if (!(sender.hasPermission("slapper.command.cancel"))) {
+                    sender.sendMessage(MSG_NO_PERM);
+                    return false;
+                }
+
                 if (!this.plugin.hitSessions.containsKey(sender.getName())) {
                     sender.sendMessage(prefix + "You are not in hit sessions!");
                     return false;
