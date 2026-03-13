@@ -55,7 +55,7 @@ To create a Human NPC that opens a menu or teleports a player:
 3.  **Add Command:** `/slapper edit 500 addcommand rca {player} warp lobby`
 
 ### 2. Managing NPCs
-* To see all spawned slappers: `/slapper list`
+* To see all available slapper entities: `/slapper list`
 * To delete an NPC: Run `/slapper remove` then hit the target NPC. You will see: `[Slapper] Entity removed!`.
 
 ---
