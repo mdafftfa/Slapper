@@ -38,10 +38,13 @@ public class SlapperCommand extends Command {
             "edit: /slapper edit [id] [args...]",
             "id: /slapper id",
             "remove: /slapper remove [id]",
-            "version: /slapper version",
             "cancel: /slapper cancel",
             "entities: /slapper entities"
     );
+
+    public String editHeader = TextFormat.YELLOW + "---------- " +
+            TextFormat.GREEN + "[" + TextFormat.YELLOW + "Slapper Edit Help" + TextFormat.GREEN + "] " +
+            TextFormat.YELLOW + "----------";
 
     public List<String> editArgs = Arrays.asList(
             "helmet: /slapper edit <eid> helmet <item_name>",
@@ -126,6 +129,7 @@ public class SlapperCommand extends Command {
                     switch (args[2].toLowerCase()) {
                         case "help":
                         case "?":
+                            sender.sendMessage(this.editHeader);
                             for (String editArgs : editArgs) {
                                 sender.sendMessage(TextFormat.GREEN + editArgs.replace("<eid>", args[1]));
                             }
