@@ -319,9 +319,7 @@ public class SlapperCommand extends Command {
                             }
                             break;
                         default:
-                            for (String editArgs : editArgs) {
-                                sender.sendMessage(TextFormat.GREEN + editArgs.replace("<eid>", args[1]));
-                            }
+                            sender.sendMessage(prefix + "Unknown command. Type '/slapper edit "+ id +" help' for help.");
                             break;
                     }
                 } else {
