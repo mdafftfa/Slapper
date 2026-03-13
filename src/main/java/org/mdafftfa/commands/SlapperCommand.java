@@ -124,6 +124,13 @@ public class SlapperCommand extends Command {
 
                 if (entity instanceof SlapperEntity || entity instanceof SlapperHumanEntity) {
                     switch (args[2].toLowerCase()) {
+                        case "help":
+                        case "?":
+                            for (String editArgs : editArgs) {
+                                sender.sendMessage(TextFormat.GREEN + editArgs.replace("<eid>", args[1]));
+                            }
+                            break;
+
                         case "helm":
                         case "helmet":
                         case "head":
