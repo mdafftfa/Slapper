@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "org.mdafftfa"
-version = "1.0.0"
+version = "1.0.1"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
@@ -40,7 +40,7 @@ publishing {
             from(components["java"])
             groupId = "org.mdafftfa"
             artifactId = "slapper"
-            version = "1.0.0"
+            version = "1.0.1"
             artifact(tasks.named("shadowJar").get()) {
                 classifier = "latest"
             }
