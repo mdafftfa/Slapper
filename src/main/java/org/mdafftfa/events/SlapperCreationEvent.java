@@ -1,10 +1,10 @@
 package org.mdafftfa.events;
 
-import cn.nukkit.Player;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.event.Cancellable;
-import cn.nukkit.event.HandlerList;
-import cn.nukkit.event.entity.EntityEvent;
+import org.powernukkitx.Player;
+import org.powernukkitx.entity.Entity;
+import org.powernukkitx.event.Cancellable;
+import org.powernukkitx.event.HandlerList;
+import org.powernukkitx.event.entity.EntityEvent;
 import org.jetbrains.annotations.Nullable;
 
 public class SlapperCreationEvent extends EntityEvent implements Cancellable {

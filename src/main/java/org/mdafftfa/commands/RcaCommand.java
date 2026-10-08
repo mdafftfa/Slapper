@@ -1,10 +1,10 @@
 package org.mdafftfa.commands;
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.command.Command;
-import cn.nukkit.command.CommandSender;
-import cn.nukkit.utils.TextFormat;
+import org.powernukkitx.Player;
+import org.powernukkitx.Server;
+import org.powernukkitx.command.Command;
+import org.powernukkitx.command.CommandSender;
+import org.powernukkitx.utils.TextFormat;
 import org.mdafftfa.Slapper;
 
 import java.util.Arrays;

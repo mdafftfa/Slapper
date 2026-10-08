@@ -1,8 +1,8 @@
 package org.mdafftfa.entity;
 
-import cn.nukkit.entity.EntityID;
-import cn.nukkit.level.format.IChunk;
-import cn.nukkit.nbt.tag.CompoundTag;
+import org.powernukkitx.entity.EntityID;
+import org.powernukkitx.level.format.IChunk;
+import org.powernukkitx.nbt.tag.CompoundTag;
 import org.jetbrains.annotations.NotNull;
 
 public class SlapperEvoker extends SlapperEntity {

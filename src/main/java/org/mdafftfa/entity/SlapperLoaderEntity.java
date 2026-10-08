@@ -1,15 +1,16 @@
 package org.mdafftfa.entity;
 
-import cn.nukkit.Server;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.data.Skin;
-import cn.nukkit.event.entity.EntityDamageEvent;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.format.IChunk;
-import cn.nukkit.nbt.NBTIO;
-import cn.nukkit.nbt.tag.CompoundTag;
+import org.cloudburstmc.protocol.bedrock.data.skin.ImageData;
+import org.powernukkitx.Server;
+import org.powernukkitx.entity.Entity;
+import org.powernukkitx.entity.data.human.Skin;
+import org.powernukkitx.event.entity.EntityDamageEvent;
+import org.powernukkitx.item.Item;
+import org.powernukkitx.level.format.IChunk;
+import org.powernukkitx.nbt.tag.CompoundTag;
 import org.jetbrains.annotations.NotNull;
 import org.mdafftfa.Slapper;
+import org.powernukkitx.utils.ItemHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,66 +39,64 @@ public class SlapperLoaderEntity extends Entity {
         return IDENTIFIER;
     }
 
-
     public void setSkin(Skin skin) {
         this.skin = skin;
     }
 
-    public Skin readSkinFromNBT(CompoundTag nbt) {
-        this.skin = new Skin();
-
-        skin.setSkinData(forceTypeSafeByteArray(nbt, "SkinData", 64 * 64 * 4));
-        skin.setCapeData(forceTypeSafeByteArray(nbt, "CapeData", 0));
-
-        skin.setAnimationData(nbt.getString("AnimationData"));
-        skin.setArmSize(nbt.getString("ArmSize"));
-        skin.setCapeId(nbt.getString("CapeId"));
-        skin.setCapeOnClassic(nbt.getBoolean("CapeOnClassic"));
-        skin.setFullSkinId(nbt.getString("FullSkinId"));
-        skin.setGeometryData(nbt.getString("GeometryData"));
-
-        skin.setOverridingPlayerAppearance(nbt.getBoolean("OverridingPlayerAppearance"));
-        skin.setGeometryName(nbt.getString("GeometryName"));
-
-        skin.setGeometryDataEngineVersion(nbt.getString("GeometryDataEngineVersion"));
-        skin.setPersona(nbt.getBoolean("Persona"));
-        skin.setPlayFabId(nbt.getString("PlayFabId"));
-        skin.setPremium(nbt.getBoolean("Premium"));
-        skin.setPrimaryUser(nbt.getBoolean("PrimaryUser"));
-        skin.setSkinColor(nbt.getString("SkinColor"));
-        skin.setSkinId(nbt.getString("SkinId"));
-        skin.setSkinResourcePatch(nbt.getString("SkinResourcePatch"));
-        skin.setTrusted(nbt.getBoolean("Trusted"));
-
-        return skin;
-    }
-
     public void writeSkinToNBT() {
         CompoundTag skinTag = new CompoundTag();
+        byte[] sData = (skin != null && skin.getSkin().getSkinData() != null) ? skin.getSkin().getSkinData().getImage() : new byte[16384];
+        if (sData == null || sData.length == 0) sData = new byte[16384];
 
-        skinTag.putByteArray("SkinData", skin.getSkinData().data);
-        skinTag.putString("AnimationData", skin.getAnimationData() != null ? skin.getAnimationData() : "");
-        skinTag.putByteArray("CapeData", skin.getCapeData() != null && skin.getCapeData().data != null ? skin.getCapeData().data : new byte[0]);
-        skinTag.putString("ArmSize", skin.getArmSize() != null ? skin.getArmSize() : "wide");
-        skinTag.putString("CapeId", skin.getCapeId() != null ? skin.getCapeId() : "");
-        skinTag.putBoolean("CapeOnClassic", skin.isCapeOnClassic());
-        skinTag.putString("FullSkinId", skin.getFullSkinId() != null ? skin.getFullSkinId() : UUID.randomUUID().toString());
-        skinTag.putString("GeometryData", skin.getGeometryData() != null ? skin.getGeometryData() : "");
+        skinTag.putByteArray("SkinData", sData);
+        if (skin.getSkin().getSkinId() != null) skinTag.putString("SkinId", skin.getSkin().getSkinId());
+        skinTag.putString("AnimationData", skin.getSkin().getAnimationData() != null ? skin.getSkin().getAnimationData() : "");
+        skinTag.putByteArray("CapeData", skin.getSkin().getCapeData() != null && skin.getSkin().getCapeData().getImage() != null ? skin.getSkin().getCapeData().getImage() : new byte[0]);
 
-        skinTag.putBoolean("OverridingPlayerAppearance", skin.isOverridingPlayerAppearance());
+        skinTag.putString("ArmSize", skin.getSkin().getArmSize() != null ? skin.getSkin().getArmSize() : "wide");
+        skinTag.putString("CapeId", skin.getSkin().getCapeId() != null ? skin.getSkin().getCapeId() : "");
+        skinTag.putBoolean("CapeOnClassic", skin.getSkin().isCapeOnClassic());
+        skinTag.putString("FullSkinId", skin.getSkin().getFullSkinId() != null ? skin.getSkin().getFullSkinId() : UUID.randomUUID().toString());
+        skinTag.putString("GeometryData", skin.getSkin().getGeometryData() != null ? skin.getSkin().getGeometryData() : "");
+
+        skinTag.putBoolean("OverridingPlayerAppearance", skin.getSkin().isOverridingPlayerAppearance());
         skinTag.putString("GeometryName", UUID.randomUUID().toString());
 
-        skinTag.putString("GeometryDataEngineVersion", skin.getGeometryDataEngineVersion() != null ? skin.getGeometryDataEngineVersion() : "");
-        skinTag.putBoolean("Persona", skin.isPersona());
-        skinTag.putString("PlayFabId", skin.getPlayFabId() != null ? skin.getPlayFabId() : "");
-        skinTag.putBoolean("Premium", skin.isPremium());
-        skinTag.putBoolean("PrimaryUser", skin.isPrimaryUser());
-        skinTag.putString("SkinColor", skin.getSkinColor() != null ? skin.getSkinColor() : "");
-        skinTag.putString("SkinId", skin.getSkinId());
-        skinTag.putString("SkinResourcePatch", skin.getSkinResourcePatch() != null ? skin.getSkinResourcePatch() : "");
-        skinTag.putBoolean("Trusted", skin.isTrusted());
+        skinTag.putString("GeometryDataEngineVersion", skin.getSkin().getGeometryDataEngineVersion() != null ? skin.getSkin().getGeometryDataEngineVersion() : "");
+        skinTag.putBoolean("Persona", skin.getSkin().isPersona());
+        skinTag.putString("PlayFabId", skin.getSkin().getPlayFabId() != null ? skin.getSkin().getPlayFabId() : "");
+        skinTag.putBoolean("Premium", skin.getSkin().isPremium());
+        skinTag.putBoolean("PrimaryUser", skin.getSkin().isPrimaryUser());
+        skinTag.putString("SkinColor", skin.getSkin().getSkinColor() != null ? skin.getSkin().getSkinColor() : "");
+        skinTag.putString("SkinResourcePatch", skin.getSkin().getSkinResourcePatch() != null ? skin.getSkin().getSkinResourcePatch() : "");
+        skinTag.putBoolean("Trusted", skin.getSkin().isValid());
 
-        this.namedTag.putCompound("SlapperSkin", skinTag);
+        this.getNbt().putCompound("SlapperSkin", skinTag);
+    }
+
+    public Skin readSkinFromNBT(CompoundTag nbt) {
+        Skin skin = new Skin(org.cloudburstmc.protocol.bedrock.data.skin.Skin.builder()
+                .skinData(ImageData.of(forceTypeSafeByteArray(nbt, "SkinData", 64 * 64 * 4)))
+                .capeData(ImageData.of(forceTypeSafeByteArray(nbt, "CapeData", 0)))
+                .animationData(nbt.getString("AnimationData"))
+                .armSize(nbt.getString("ArmSize"))
+                .capeId(nbt.getString("CapeId"))
+                .capeOnClassic(nbt.getBoolean("CapeOnClassic"))
+                .fullSkinId(nbt.getString("FullSkinId"))
+                .geometryData(nbt.getString("GeometryData"))
+                .overridingPlayerAppearance(nbt.getBoolean("OverridingPlayerAppearance"))
+                .geometryName(nbt.getString("GeometryName"))
+                .geometryDataEngineVersion(nbt.getString("GeometryDataEngineVersion"))
+                .persona(nbt.getBoolean("Persona"))
+                .playFabId(nbt.getString("PlayFabId"))
+                .premium(nbt.getBoolean("Premium"))
+                .primaryUser(nbt.getBoolean("PrimaryUser"))
+                .skinColor(nbt.getString("SkinColor"))
+                .skinId(nbt.getString("SkinId"))
+                .skinResourcePatch(nbt.getString("SkinResourcePatch"))
+                .build()
+                , nbt.getBoolean("Trusted"));
+        return skin;
     }
 
     public void writeInventoryToNBT() {
@@ -107,14 +106,14 @@ public class SlapperLoaderEntity extends Entity {
 
         for (Map.Entry<Integer, Item> contents : this.inventory.entrySet()) {
             if (!(contents.getValue().isNull())) {
-                inventory.putCompound(contents.getKey().toString(), NBTIO.putItemHelper(contents.getValue()));
+                inventory.putCompound(contents.getKey().toString(), ItemHelper.write(contents.getValue()));
             }
         }
 
         slapperInventory.putCompound("Inventory", inventory);
-        slapperInventory.putCompound("OffHandInventory", NBTIO.putItemHelper(this.offHandInventory));
+        slapperInventory.putCompound("OffHandInventory", ItemHelper.write(this.offHandInventory));
 
-        this.namedTag.putCompound("SlapperInventory", slapperInventory);
+        this.getNbt().putCompound("SlapperInventory", slapperInventory);
     }
 
     public void readInventoryFromNBT(CompoundTag nbt) {
@@ -126,17 +125,17 @@ public class SlapperLoaderEntity extends Entity {
         for (int i = 0; i < 100; i++) {
             String slot = String.valueOf(i);
             if (inventory.containsCompound(slot)) {
-                Item item = NBTIO.getItemHelper(inventory.getCompound(slot));
+                Item item = ItemHelper.read(inventory.getCompound(slot));
                 contentsInventory.put(Integer.parseInt(slot), item);
             }
         }
 
         this.inventory.putAll(contentsInventory);
-        this.offHandInventory = NBTIO.getItemHelper(offHandInventory);
+        this.offHandInventory = ItemHelper.read(offHandInventory);
     }
 
     private byte[] forceTypeSafeByteArray(CompoundTag tag, String key, int defaultLen) {
-        if (tag.contains(key) && tag.get(key) instanceof cn.nukkit.nbt.tag.ByteArrayTag) {
+        if (tag.contains(key) && tag.get(key) instanceof org.powernukkitx.nbt.tag.ByteArrayTag) {
             return tag.getByteArray(key);
         }
 
@@ -144,24 +143,24 @@ public class SlapperLoaderEntity extends Entity {
     }
 
     public boolean isSlapperEntity() {
-        if (Slapper.getInstance().ENTITY_TYPES.containsKey(namedTag.getString("SlapperType")) && !namedTag.getString("SlapperType").equalsIgnoreCase("Human")) return true;
+        if (Slapper.getInstance().ENTITY_TYPES.containsKey(getNbt().getString("SlapperType")) && !getNbt().getString("SlapperType").equalsIgnoreCase("Human")) return true;
         return false;
     }
 
     public boolean isSlapperHumanEntity() {
-        if (Slapper.getInstance().ENTITY_TYPES.containsKey(namedTag.getString("SlapperType")) && namedTag.getString("SlapperType").equalsIgnoreCase("Human")) return true;
+        if (Slapper.getInstance().ENTITY_TYPES.containsKey(getNbt().getString("SlapperType")) && getNbt().getString("SlapperType").equalsIgnoreCase("Human")) return true;
         return false;
     }
 
     public void writeSlapperDataFromEntity(Entity entity) {
-        namedTag.putString("NameTag", entity.namedTag.getString("NameTag"));
-        namedTag.putString("SlapperType", entity.namedTag.getString("SlapperType"));
-        namedTag.putList("Commands", entity.namedTag.getList("Commands"));
+        getNbt().putString("NameTag", entity.getNbt().getString("NameTag"));
+        getNbt().putString("SlapperType", entity.getNbt().getString("SlapperType"));
+        getNbt().putList("Commands", entity.getNbt().getList("Commands"));
 
         if (entity instanceof SlapperHumanEntity) {
-            this.setSkin(this.readSkinFromNBT(entity.namedTag.getCompound("SlapperSkin")));
+            this.setSkin(this.readSkinFromNBT(entity.getNbt().getCompound("SlapperSkin")));
             this.writeSkinToNBT();
-            this.readInventoryFromNBT(entity.namedTag.getCompound("SlapperInventory"));
+            this.readInventoryFromNBT(entity.getNbt().getCompound("SlapperInventory"));
             this.writeInventoryToNBT();
         }
     }
@@ -179,13 +178,13 @@ public class SlapperLoaderEntity extends Entity {
             inventory = new ConcurrentHashMap<>();
         }
 
-        this.namedTag.putBoolean(TAG, true);
+        this.getNbt().putBoolean(TAG, true);
     }
 
 
     @Override
     public boolean attack(EntityDamageEvent source) {
-        Server.getInstance().getLogger().info(this.namedTag.toString());
+        Server.getInstance().getLogger().info(this.getNbt().toString());
         this.close();
         return super.attack(source);
     }

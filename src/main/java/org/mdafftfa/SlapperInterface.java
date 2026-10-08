@@ -1,6 +1,6 @@
 package org.mdafftfa;
 
-import cn.nukkit.entity.Entity;
+import org.powernukkitx.entity.Entity;
 import java.util.List;
 
 public interface SlapperInterface {

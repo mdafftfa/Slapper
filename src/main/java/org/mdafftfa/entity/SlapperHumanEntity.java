@@ -1,24 +1,24 @@
 package org.mdafftfa.entity;
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.command.ConsoleCommandSender;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityHuman;
-import cn.nukkit.entity.IHuman;
-import cn.nukkit.entity.custom.CustomEntity;
-import cn.nukkit.entity.custom.CustomEntityDefinition;
-import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.entity.data.Skin;
-import cn.nukkit.event.entity.EntityDamageByEntityEvent;
-import cn.nukkit.event.entity.EntityDamageEvent;
-import cn.nukkit.inventory.*;
-import cn.nukkit.item.Item;
-import cn.nukkit.level.format.IChunk;
-import cn.nukkit.nbt.NBTIO;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.ListTag;
-import cn.nukkit.nbt.tag.StringTag;
+import org.cloudburstmc.protocol.bedrock.data.actor.ActorFlags;
+import org.cloudburstmc.protocol.bedrock.data.skin.ImageData;
+import org.powernukkitx.Player;
+import org.powernukkitx.Server;
+import org.powernukkitx.command.ConsoleCommandSender;
+import org.powernukkitx.entity.Entity;
+import org.powernukkitx.entity.EntityHuman;
+import org.powernukkitx.entity.IHuman;
+import org.powernukkitx.entity.custom.CustomEntity;
+import org.powernukkitx.entity.custom.CustomEntityDefinition;
+import org.powernukkitx.entity.data.human.Skin;
+import org.powernukkitx.event.entity.EntityDamageByEntityEvent;
+import org.powernukkitx.event.entity.EntityDamageEvent;
+import org.powernukkitx.inventory.*;
+import org.powernukkitx.item.Item;
+import org.powernukkitx.level.format.IChunk;
+import org.powernukkitx.nbt.tag.CompoundTag;
+import org.powernukkitx.nbt.tag.ListTag;
+import org.powernukkitx.nbt.tag.StringTag;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +27,7 @@ import org.mdafftfa.Slapper;
 import org.mdafftfa.SlapperInterface;
 import org.mdafftfa.events.SlapperDeletionEvent;
 import org.mdafftfa.events.SlapperHitEvent;
+import org.powernukkitx.utils.ItemHelper;
 
 import java.util.*;
 
@@ -55,7 +56,6 @@ public class SlapperHumanEntity extends EntityHuman implements SlapperInterface,
                 .eid(IDENTIFIER)
                 .hasSpawnEgg(false)
                 .isSummonable(false)
-                .maxHealth(20)
                 .physics(false, false, false)
                 .pushable(false, false)
                 .isPersistent(true)
@@ -64,61 +64,57 @@ public class SlapperHumanEntity extends EntityHuman implements SlapperInterface,
 
     public void writeSkinToNBT() {
         CompoundTag skinTag = new CompoundTag();
-        byte[] sData = (skin != null && skin.getSkinData() != null) ? skin.getSkinData().data : new byte[16384];
+        byte[] sData = (skin != null && skin.getSkin().getSkinData() != null) ? skin.getSkin().getSkinData().getImage() : new byte[16384];
         if (sData == null || sData.length == 0) sData = new byte[16384];
 
         skinTag.putByteArray("SkinData", sData);
-        if (skin.getSkinId() != null) skinTag.putString("SkinId", skin.getSkinId());
-        skinTag.putString("AnimationData", skin.getAnimationData() != null ? skin.getAnimationData() : "");
-        skinTag.putByteArray("CapeData", skin.getCapeData() != null && skin.getCapeData().data != null ? skin.getCapeData().data : new byte[0]);
+        if (skin.getSkin().getSkinId() != null) skinTag.putString("SkinId", skin.getSkin().getSkinId());
+        skinTag.putString("AnimationData", skin.getSkin().getAnimationData() != null ? skin.getSkin().getAnimationData() : "");
+        skinTag.putByteArray("CapeData", skin.getSkin().getCapeData() != null && skin.getSkin().getCapeData().getImage() != null ? skin.getSkin().getCapeData().getImage() : new byte[0]);
 
-        skinTag.putString("ArmSize", skin.getArmSize() != null ? skin.getArmSize() : "wide");
-        skinTag.putString("CapeId", skin.getCapeId() != null ? skin.getCapeId() : "");
-        skinTag.putBoolean("CapeOnClassic", skin.isCapeOnClassic());
-        skinTag.putString("FullSkinId", skin.getFullSkinId() != null ? skin.getFullSkinId() : UUID.randomUUID().toString());
-        skinTag.putString("GeometryData", skin.getGeometryData() != null ? skin.getGeometryData() : "");
+        skinTag.putString("ArmSize", skin.getSkin().getArmSize() != null ? skin.getSkin().getArmSize() : "wide");
+        skinTag.putString("CapeId", skin.getSkin().getCapeId() != null ? skin.getSkin().getCapeId() : "");
+        skinTag.putBoolean("CapeOnClassic", skin.getSkin().isCapeOnClassic());
+        skinTag.putString("FullSkinId", skin.getSkin().getFullSkinId() != null ? skin.getSkin().getFullSkinId() : UUID.randomUUID().toString());
+        skinTag.putString("GeometryData", skin.getSkin().getGeometryData() != null ? skin.getSkin().getGeometryData() : "");
 
-        skinTag.putBoolean("OverridingPlayerAppearance", skin.isOverridingPlayerAppearance());
+        skinTag.putBoolean("OverridingPlayerAppearance", skin.getSkin().isOverridingPlayerAppearance());
         skinTag.putString("GeometryName", UUID.randomUUID().toString());
 
-        skinTag.putString("GeometryDataEngineVersion", skin.getGeometryDataEngineVersion() != null ? skin.getGeometryDataEngineVersion() : "");
-        skinTag.putBoolean("Persona", skin.isPersona());
-        skinTag.putString("PlayFabId", skin.getPlayFabId() != null ? skin.getPlayFabId() : "");
-        skinTag.putBoolean("Premium", skin.isPremium());
-        skinTag.putBoolean("PrimaryUser", skin.isPrimaryUser());
-        skinTag.putString("SkinColor", skin.getSkinColor() != null ? skin.getSkinColor() : "");
-        skinTag.putString("SkinResourcePatch", skin.getSkinResourcePatch() != null ? skin.getSkinResourcePatch() : "");
-        skinTag.putBoolean("Trusted", skin.isTrusted());
+        skinTag.putString("GeometryDataEngineVersion", skin.getSkin().getGeometryDataEngineVersion() != null ? skin.getSkin().getGeometryDataEngineVersion() : "");
+        skinTag.putBoolean("Persona", skin.getSkin().isPersona());
+        skinTag.putString("PlayFabId", skin.getSkin().getPlayFabId() != null ? skin.getSkin().getPlayFabId() : "");
+        skinTag.putBoolean("Premium", skin.getSkin().isPremium());
+        skinTag.putBoolean("PrimaryUser", skin.getSkin().isPrimaryUser());
+        skinTag.putString("SkinColor", skin.getSkin().getSkinColor() != null ? skin.getSkin().getSkinColor() : "");
+        skinTag.putString("SkinResourcePatch", skin.getSkin().getSkinResourcePatch() != null ? skin.getSkin().getSkinResourcePatch() : "");
+        skinTag.putBoolean("Trusted", skin.getSkin().isValid());
 
-        this.namedTag.putCompound("SlapperSkin", skinTag);
+        this.getNbt().putCompound("SlapperSkin", skinTag);
     }
 
     public Skin readSkinFromNBT(CompoundTag nbt) {
-        Skin skin = new Skin();
-
-        skin.setSkinData(forceTypeSafeByteArray(nbt, "SkinData", 64 * 64 * 4));
-        skin.setCapeData(forceTypeSafeByteArray(nbt, "CapeData", 0));
-
-        skin.setAnimationData(nbt.getString("AnimationData"));
-        skin.setArmSize(nbt.getString("ArmSize"));
-        skin.setCapeId(nbt.getString("CapeId"));
-        skin.setCapeOnClassic(nbt.getBoolean("CapeOnClassic"));
-        skin.setFullSkinId(nbt.getString("FullSkinId"));
-        skin.setGeometryData(nbt.getString("GeometryData"));
-
-        skin.setOverridingPlayerAppearance(nbt.getBoolean("OverridingPlayerAppearance"));
-        skin.setGeometryName(nbt.getString("GeometryName"));
-
-        skin.setGeometryDataEngineVersion(nbt.getString("GeometryDataEngineVersion"));
-        skin.setPersona(nbt.getBoolean("Persona"));
-        skin.setPlayFabId(nbt.getString("PlayFabId"));
-        skin.setPremium(nbt.getBoolean("Premium"));
-        skin.setPrimaryUser(nbt.getBoolean("PrimaryUser"));
-        skin.setSkinColor(nbt.getString("SkinColor"));
-        skin.setSkinId(nbt.getString("SkinId"));
-        skin.setSkinResourcePatch(nbt.getString("SkinResourcePatch"));
-        skin.setTrusted(nbt.getBoolean("Trusted"));
-
+        Skin skin = new Skin(org.cloudburstmc.protocol.bedrock.data.skin.Skin.builder()
+                .skinData(ImageData.of(forceTypeSafeByteArray(nbt, "SkinData", 64 * 64 * 4)))
+                .capeData(ImageData.of(forceTypeSafeByteArray(nbt, "CapeData", 0)))
+                .animationData(nbt.getString("AnimationData"))
+                .armSize(nbt.getString("ArmSize"))
+                .capeId(nbt.getString("CapeId"))
+                .capeOnClassic(nbt.getBoolean("CapeOnClassic"))
+                .fullSkinId(nbt.getString("FullSkinId"))
+                .geometryData(nbt.getString("GeometryData"))
+                .overridingPlayerAppearance(nbt.getBoolean("OverridingPlayerAppearance"))
+                .geometryName(nbt.getString("GeometryName"))
+                .geometryDataEngineVersion(nbt.getString("GeometryDataEngineVersion"))
+                .persona(nbt.getBoolean("Persona"))
+                .playFabId(nbt.getString("PlayFabId"))
+                .premium(nbt.getBoolean("Premium"))
+                .primaryUser(nbt.getBoolean("PrimaryUser"))
+                .skinColor(nbt.getString("SkinColor"))
+                .skinId(nbt.getString("SkinId"))
+                .skinResourcePatch(nbt.getString("SkinResourcePatch"))
+                .build()
+        , nbt.getBoolean("Trusted"));
         return skin;
     }
 
@@ -129,14 +125,14 @@ public class SlapperHumanEntity extends EntityHuman implements SlapperInterface,
 
         for (Map.Entry<Integer, Item> contents : this.getInventory().getContents().entrySet()) {
             if (!(contents.getValue().isNull())) {
-                inventory.putCompound(contents.getKey().toString(), NBTIO.putItemHelper(contents.getValue()));
+                inventory.putCompound(contents.getKey().toString(), ItemHelper.write(contents.getValue()));
             }
         }
 
         slapperInventory.putCompound("Inventory", inventory);
-        slapperInventory.putCompound("OffHandInventory", NBTIO.putItemHelper(this.getOffhandInventory().getItem(0)));
+        slapperInventory.putCompound("OffHandInventory", ItemHelper.write(this.getOffhandInventory().getItem(0)));
 
-        this.namedTag.putCompound("SlapperInventory", slapperInventory);
+        this.getNbt().putCompound("SlapperInventory", slapperInventory);
     }
 
     public void readInventoryFromNBT(CompoundTag nbt) {
@@ -148,19 +144,19 @@ public class SlapperHumanEntity extends EntityHuman implements SlapperInterface,
         for (int i = 0; i < 100; i++) {
             String slot = String.valueOf(i);
             if (inventory.containsCompound(slot)) {
-                Item item = NBTIO.getItemHelper(inventory.getCompound(slot));
+                Item item = ItemHelper.read(inventory.getCompound(slot));
                 contentsInventory.put(Integer.parseInt(slot), item);
             }
         }
 
-        Item item = NBTIO.getItemHelper(offHandInventory);
+        Item item = ItemHelper.read(offHandInventory);
 
         this.getInventory().setContents(contentsInventory);
         this.getOffhandInventory().setItem(item);
     }
 
     private byte[] forceTypeSafeByteArray(CompoundTag tag, String key, int defaultLen) {
-        if (tag.contains(key) && tag.get(key) instanceof cn.nukkit.nbt.tag.ByteArrayTag) {
+        if (tag.contains(key) && tag.get(key) instanceof org.powernukkitx.nbt.tag.ByteArrayTag) {
             return tag.getByteArray(key);
         }
 
@@ -169,13 +165,13 @@ public class SlapperHumanEntity extends EntityHuman implements SlapperInterface,
 
     @Override @SuppressWarnings("unchecked")
     public void setDataFromEntity(Entity entity) {
-        this.setSkin(readSkinFromNBT(entity.namedTag.getCompound("SlapperSkin")));
-        this.readInventoryFromNBT(entity.namedTag.getCompound("SlapperInventory"));
+        this.setSkin(readSkinFromNBT(entity.getNbt().getCompound("SlapperSkin")));
+        this.readInventoryFromNBT(entity.getNbt().getCompound("SlapperInventory"));
 
-        ListTag<StringTag> commandsTag = entity.namedTag.getList("Commands", StringTag.class);
+        ListTag<StringTag> commandsTag = entity.getNbt().getList("Commands", StringTag.class);
         this.commands.setAll(commandsTag.getAll());
 
-        this.setNameTag(entity.namedTag.getString("NameTag"));
+        this.setNameTag(entity.getNbt().getString("NameTag"));
     }
 
     @Override
@@ -184,15 +180,15 @@ public class SlapperHumanEntity extends EntityHuman implements SlapperInterface,
         setCanBeSavedWithChunk(true);
 
         if (this.commands == null) {
-            if (namedTag.containsList("Commands")) {
-                this.commands = this.namedTag.getList("Commands", StringTag.class);
+            if (getNbt().containsList("Commands")) {
+                this.commands = this.getNbt().getList("Commands", StringTag.class);
             } else {
                 this.commands = new ListTag<>();
             }
         }
 
-        this.setDataFlag(EntityFlag.CAN_SHOW_NAME, true);
-        this.setDataFlag(EntityFlag.ALWAYS_SHOW_NAME, true);
+        this.setDataFlag(ActorFlags.CAN_SHOW_NAME, true);
+        this.setDataFlag(ActorFlags.ALWAYS_SHOW_NAME, true);
         this.setNameTagAlwaysVisible(true);
     }
 
@@ -213,10 +209,10 @@ public class SlapperHumanEntity extends EntityHuman implements SlapperInterface,
 
         this.writeSkinToNBT();
         this.writeInventoryToNBT();
-        this.namedTag.putBoolean(TAG, true);
-        this.namedTag.putString("SlapperType", getEntityType());
-        this.namedTag.putString("NameTag", this.getNameTag());
-        this.namedTag.putList("Commands", this.commands);
+        this.getNbt().putBoolean(TAG, true);
+        this.getNbt().putString("SlapperType", getEntityType());
+        this.getNbt().putString("NameTag", this.getNameTag());
+        this.getNbt().putList("Commands", this.commands);
     }
 
     @Override

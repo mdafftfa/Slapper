@@ -1,11 +1,11 @@
 package org.mdafftfa;
 
-import cn.nukkit.entity.Entity;
-import cn.nukkit.event.EventHandler;
-import cn.nukkit.event.EventPriority;
-import cn.nukkit.event.Listener;
-import cn.nukkit.event.level.LevelSaveEvent;
-import cn.nukkit.level.Level;
+import org.powernukkitx.entity.Entity;
+import org.powernukkitx.event.EventHandler;
+import org.powernukkitx.event.EventPriority;
+import org.powernukkitx.event.Listener;
+import org.powernukkitx.event.level.LevelSaveEvent;
+import org.powernukkitx.level.Level;
 
 import org.mdafftfa.entity.SlapperEntity;
 import org.mdafftfa.entity.SlapperHumanEntity;
@@ -25,14 +25,14 @@ public class SlapperListener implements Listener {
     public void onLevelSafe(LevelSaveEvent event) {
         Level level = event.getLevel();
         for (Entity entity : level.getEntities()) {
-            if (entity.namedTag.getBoolean(SlapperHumanEntity.TAG) && entity instanceof SlapperHumanEntity) {
+            if (entity.getNbt().getBoolean(SlapperHumanEntity.TAG) && entity instanceof SlapperHumanEntity) {
                 SlapperLoaderEntity slapper = new SlapperLoaderEntity(entity.getChunk(), Entity.getDefaultNBT(entity));
                 slapper.writeSlapperDataFromEntity(entity);
                 entity.close();
                 slapper.spawnToAll();
             }
 
-            if (entity.namedTag.getBoolean(SlapperEntity.TAG) && entity instanceof SlapperEntity) {
+            if (entity.getNbt().getBoolean(SlapperEntity.TAG) && entity instanceof SlapperEntity) {
                 SlapperLoaderEntity slapper = new SlapperLoaderEntity(entity.getChunk(), Entity.getDefaultNBT(entity));
                 slapper.writeSlapperDataFromEntity(entity);
                 entity.close();

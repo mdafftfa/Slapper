@@ -1,7 +1,7 @@
 package org.mdafftfa.entity;
 
-import cn.nukkit.level.format.IChunk;
-import cn.nukkit.nbt.tag.CompoundTag;
+import org.powernukkitx.level.format.IChunk;
+import org.powernukkitx.nbt.tag.CompoundTag;
 import org.jetbrains.annotations.NotNull;
 
 public class SlapperVex extends SlapperEntity {

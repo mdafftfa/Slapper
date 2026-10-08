@@ -1,8 +1,8 @@
 package org.mdafftfa.entity;
 
-import cn.nukkit.entity.EntityLiving;
-import cn.nukkit.level.format.IChunk;
-import cn.nukkit.nbt.tag.CompoundTag;
+import org.powernukkitx.entity.EntityLiving;
+import org.powernukkitx.level.format.IChunk;
+import org.powernukkitx.nbt.tag.CompoundTag;
 import org.jetbrains.annotations.NotNull;
 
 public class SlapperVillager extends SlapperEntity {

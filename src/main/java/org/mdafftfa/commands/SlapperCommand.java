@@ -1,18 +1,18 @@
 package org.mdafftfa.commands;
 
-import cn.nukkit.Server;
-import cn.nukkit.command.Command;
-import cn.nukkit.command.CommandSender;
+import org.powernukkitx.Server;
+import org.powernukkitx.command.Command;
+import org.powernukkitx.command.CommandSender;
 
-import cn.nukkit.entity.Entity;
-import cn.nukkit.item.Item;
+import org.powernukkitx.entity.Entity;
+import org.powernukkitx.item.Item;
 
-import cn.nukkit.level.Location;
-import cn.nukkit.level.format.IChunk;
+import org.powernukkitx.level.Location;
+import org.powernukkitx.level.format.IChunk;
 
-import cn.nukkit.nbt.tag.CompoundTag;
+import org.powernukkitx.nbt.tag.CompoundTag;
 
-import cn.nukkit.utils.TextFormat;
+import org.powernukkitx.utils.TextFormat;
 import org.mdafftfa.HitSessionType;
 import org.mdafftfa.Slapper;
 import org.mdafftfa.SlapperInterface;
@@ -141,7 +141,7 @@ public class SlapperCommand extends Command {
                         case "hat":
                         case "cap":
                             if (entity instanceof SlapperHumanEntity) {
-                                Item hand = sender.asPlayer().getInventory().getItemInHand();
+                                Item hand = sender.asPlayer().getInventory().getItemInMainHand();
                                 if (hand.isHelmet()) {
                                     ((SlapperHumanEntity) entity).getInventory().setHelmet(hand);
                                     sender.sendMessage(prefix + "Helmet armor updated successfully!");
@@ -157,7 +157,7 @@ public class SlapperCommand extends Command {
                         case "shirt":
                         case "chestplate":
                             if (entity instanceof SlapperHumanEntity) {
-                                Item hand = sender.asPlayer().getInventory().getItemInHand();
+                                Item hand = sender.asPlayer().getInventory().getItemInMainHand();
                                 if (hand.isChestplate()) {
                                     ((SlapperHumanEntity) entity).getInventory().setChestplate(hand);
                                     sender.sendMessage(prefix + "Chestplate armor updated successfully!");
@@ -173,7 +173,7 @@ public class SlapperCommand extends Command {
                         case "legs":
                         case "leggings":
                             if (entity instanceof SlapperHumanEntity) {
-                                Item hand = sender.asPlayer().getInventory().getItemInHand();
+                                Item hand = sender.asPlayer().getInventory().getItemInMainHand();
                                 if (hand.isLeggings()) {
                                     ((SlapperHumanEntity) entity).getInventory().setLeggings(hand);
                                     sender.sendMessage(prefix + "Legging armor updated successfully!");
@@ -189,7 +189,7 @@ public class SlapperCommand extends Command {
                         case "boots":
                         case "shoes":
                             if (entity instanceof SlapperHumanEntity) {
-                                Item hand = sender.asPlayer().getInventory().getItemInHand();
+                                Item hand = sender.asPlayer().getInventory().getItemInMainHand();
                                 if (hand.isBoots()) {
                                     ((SlapperHumanEntity) entity).getInventory().setBoots(hand);
                                     sender.sendMessage(prefix + "Boot armor updated successfully!");
@@ -207,7 +207,7 @@ public class SlapperCommand extends Command {
                         case "arm":
                         case "held":
                             if (entity instanceof SlapperHumanEntity) {
-                                Item hand = sender.asPlayer().getInventory().getItemInHand();
+                                Item hand = sender.asPlayer().getInventory().getItemInMainHand();
                                 ((SlapperHumanEntity) entity).getInventory().setItemInHand(hand);
                                 sender.sendMessage(prefix + "Item updated successfully!");
                             } else {
@@ -216,7 +216,7 @@ public class SlapperCommand extends Command {
                             break;
                         case "offhand":
                             if (entity instanceof SlapperHumanEntity) {
-                                Item hand = sender.asPlayer().getInventory().getItemInHand();
+                                Item hand = sender.asPlayer().getInventory().getItemInMainHand();
                                 ((SlapperHumanEntity) entity).getOffhandInventory().setItem(hand);
                                 sender.sendMessage(prefix + "Item updated successfully!");
                             } else {
@@ -448,7 +448,7 @@ public class SlapperCommand extends Command {
                     if (entity instanceof SlapperHumanEntity && !(event.isCancelled())) {
                         ((SlapperHumanEntity) entity).setNameTag(name);
                         ((SlapperHumanEntity) entity).setSkin(sender.asPlayer().getSkin());
-                        ((SlapperHumanEntity) entity).getInventory().setItemInHand(sender.asPlayer().getInventory().getItemInHand());
+                        ((SlapperHumanEntity) entity).getInventory().setItemInHand(sender.asPlayer().getInventory().getItemInMainHand());
                         ((SlapperHumanEntity) entity).getOffhandInventory().setItem(sender.asPlayer().getOffhandInventory().getItem(0));
                         ((SlapperHumanEntity) entity).getInventory().setArmorContents(sender.asPlayer().getInventory().getArmorContents());
                         ((SlapperHumanEntity) entity).spawnToAll();

@@ -1,16 +1,16 @@
 package org.mdafftfa;
 
-import cn.nukkit.Server;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Location;
-import cn.nukkit.level.format.IChunk;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.plugin.PluginBase;
-import cn.nukkit.registry.Registries;
-import cn.nukkit.scheduler.Task;
+import org.powernukkitx.Server;
+import org.powernukkitx.entity.Entity;
+import org.powernukkitx.level.Level;
+import org.powernukkitx.level.Location;
+import org.powernukkitx.level.format.IChunk;
+import org.powernukkitx.nbt.tag.CompoundTag;
+import org.powernukkitx.plugin.PluginBase;
+import org.powernukkitx.registry.Registries;
+import org.powernukkitx.scheduler.Task;
 
-import cn.nukkit.utils.TextFormat;
+import org.powernukkitx.utils.TextFormat;
 import org.mdafftfa.commands.RcaCommand;
 import org.mdafftfa.commands.SlapperCommand;
 import org.mdafftfa.entity.*;
@@ -119,14 +119,14 @@ public class Slapper extends PluginBase {
 
                     for (Entity entity : level.getEntities()) {
 
-                        if (entity.namedTag.getBoolean(SlapperLoaderEntity.TAG) && !(entity instanceof SlapperLoaderEntity)) {
-                            SlapperLoaderEntity newEntity = new SlapperLoaderEntity(entity.getChunk(), entity.namedTag.copy());
+                        if (entity.getNbt().getBoolean(SlapperLoaderEntity.TAG) && !(entity instanceof SlapperLoaderEntity)) {
+                            SlapperLoaderEntity newEntity = new SlapperLoaderEntity(entity.getChunk(), entity.getNbt().copy());
                             newEntity.writeSlapperDataFromEntity(entity);
                             entity.close();
                             newEntity.spawnToAll();
                         }
 
-                        if (entity.namedTag.getBoolean(SlapperLoaderEntity.TAG) && entity instanceof SlapperLoaderEntity) {
+                        if (entity.getNbt().getBoolean(SlapperLoaderEntity.TAG) && entity instanceof SlapperLoaderEntity) {
                             if (((SlapperLoaderEntity) entity).isSlapperHumanEntity()) {
                                 SlapperHumanEntity slapper = new SlapperHumanEntity(entity.chunk, Entity.getDefaultNBT(entity.getLocation()));
                                 slapper.setDataFromEntity(entity);
@@ -141,7 +141,7 @@ public class Slapper extends PluginBase {
                                     CompoundTag nbt = Entity.getDefaultNBT(location);
 
                                     Constructor<? extends SlapperInterface> constructor =
-                                            ENTITY_TYPES.get(entity.namedTag.getString("SlapperType"));
+                                            ENTITY_TYPES.get(entity.getNbt().getString("SlapperType"));
 
                                     if (constructor == null) {
                                         continue;
@@ -157,8 +157,8 @@ public class Slapper extends PluginBase {
                         }
 
                         if (
-                                (entity.namedTag.getBoolean(SlapperEntity.TAG) && !(entity instanceof SlapperEntity)) ||
-                                        (entity.namedTag.getBoolean(SlapperHumanEntity.TAG) && !(entity instanceof SlapperHumanEntity))
+                                (entity.getNbt().getBoolean(SlapperEntity.TAG) && !(entity instanceof SlapperEntity)) ||
+                                        (entity.getNbt().getBoolean(SlapperHumanEntity.TAG) && !(entity instanceof SlapperHumanEntity))
                         ) {
 
                             try {
@@ -167,7 +167,7 @@ public class Slapper extends PluginBase {
                                 CompoundTag nbt = Entity.getDefaultNBT(location);
 
                                 Constructor<? extends SlapperInterface> constructor =
-                                        ENTITY_TYPES.get(entity.namedTag.getString("SlapperType"));
+                                        ENTITY_TYPES.get(entity.getNbt().getString("SlapperType"));
 
                                 if (constructor == null) {
                                     continue;

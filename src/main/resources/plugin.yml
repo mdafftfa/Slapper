@@ -1,9 +1,9 @@
 ---
 name: Slapper
-version: 1.0.0
+version: 1.0.1
 main: org.mdafftfa.Slapper
 author: mdafftfa
-api: 2.0.0
+api: 3.0.0
 
 permissions:
   rca.command:

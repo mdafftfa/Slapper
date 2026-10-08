@@ -1,17 +1,17 @@
 package org.mdafftfa.entity;
 
-import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.command.ConsoleCommandSender;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.data.EntityFlag;
-import cn.nukkit.event.entity.EntityDamageByEntityEvent;
-import cn.nukkit.event.entity.EntityDamageEvent;
-import cn.nukkit.level.format.IChunk;
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.ListTag;
+import org.cloudburstmc.protocol.bedrock.data.actor.ActorFlags;
+import org.powernukkitx.Player;
+import org.powernukkitx.Server;
+import org.powernukkitx.command.ConsoleCommandSender;
+import org.powernukkitx.entity.Entity;
+import org.powernukkitx.event.entity.EntityDamageByEntityEvent;
+import org.powernukkitx.event.entity.EntityDamageEvent;
+import org.powernukkitx.level.format.IChunk;
+import org.powernukkitx.nbt.tag.CompoundTag;
+import org.powernukkitx.nbt.tag.ListTag;
 
-import cn.nukkit.nbt.tag.StringTag;
+import org.powernukkitx.nbt.tag.StringTag;
 import org.jetbrains.annotations.NotNull;
 
 import org.mdafftfa.HitSessionType;
@@ -44,8 +44,8 @@ public class SlapperEntity extends Entity implements SlapperInterface {
 
     @Override @SuppressWarnings("unchecked")
     public void setDataFromEntity(Entity entity) {
-        this.setNameTag(entity.namedTag.getString("NameTag"));
-        ListTag<StringTag> commandsTag = entity.namedTag.getList("Commands", StringTag.class);
+        this.setNameTag(entity.getNbt().getString("NameTag"));
+        ListTag<StringTag> commandsTag = entity.getNbt().getList("Commands", StringTag.class);
         this.commands.setAll(commandsTag.getAll());
     }
 
@@ -55,15 +55,15 @@ public class SlapperEntity extends Entity implements SlapperInterface {
         setCanBeSavedWithChunk(true);
 
         if (this.commands == null) {
-            if (namedTag.containsList("Commands")) {
-                this.commands = this.namedTag.getList("Commands", StringTag.class);
+            if (getNbt().containsList("Commands")) {
+                this.commands = this.getNbt().getList("Commands", StringTag.class);
             } else {
                 this.commands = new ListTag<>();
             }
         }
 
-        this.setDataFlag(EntityFlag.CAN_SHOW_NAME, true);
-        this.setDataFlag(EntityFlag.ALWAYS_SHOW_NAME, true);
+        this.setDataFlag(ActorFlags.CAN_SHOW_NAME, true);
+        this.setDataFlag(ActorFlags.ALWAYS_SHOW_NAME, true);
         this.setNameTagAlwaysVisible(true);
     }
 
@@ -71,10 +71,10 @@ public class SlapperEntity extends Entity implements SlapperInterface {
     public void saveNBT() {
         super.saveNBT();
 
-        this.namedTag.putBoolean(TAG, true);
-        this.namedTag.putString("SlapperType", getEntityType());
-        this.namedTag.putString("NameTag", this.getNameTag());
-        this.namedTag.putList("Commands", this.commands);
+        this.getNbt().putBoolean(TAG, true);
+        this.getNbt().putString("SlapperType", getEntityType());
+        this.getNbt().putString("NameTag", this.getNameTag());
+        this.getNbt().putList("Commands", this.commands);
     }
 
     @Override
